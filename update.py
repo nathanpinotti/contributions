@@ -4,7 +4,7 @@ import feedparser
 import requests
 
 BLOGS = ["https://nathanpinotti.com.br", "https://entraidbrasil.com.br"]
-YT_CHANNEL_ID = "COLOQUE_O_CHANNEL_ID"  # UC...
+YT_CHANNEL_ID = "UCUaOb2eE8qvNxNMtzL1D2aQ"  # UC...
 
 
 def clean(t, n=200):
