@@ -21,6 +21,7 @@ def wp_posts(site):
             params={"per_page": 100, "page": page, "_fields": "date,link,title,excerpt"},
             timeout=30,
         )
+        print(site, page, r.status_code, r.text[:150])
         if r.status_code != 200:
             break
         for p in r.json():
