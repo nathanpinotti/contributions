@@ -59,3 +59,4 @@ for site in BLOGS:
     update(f"contributions/{name}.md", f"Artigos - {name}", list(wp_posts(site)))
 
 update("contributions/youtube.md", "Vídeos - YouTube", list(yt_videos()))
+
