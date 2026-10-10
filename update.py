@@ -1,4 +1,4 @@
-import html, pathlib, re
+import html, os, pathlib, re
 
 import feedparser
 import requests
@@ -15,11 +15,14 @@ def clean(t, n=200):
 
 def wp_posts(site):
     page = 1
+    h = {"User-Agent": "Mozilla/5.0 (compatible; contributions-bot)"}
+    if "nathanpinotti.com.br" in site:
+        h["X-Contrib-Token"] = os.environ["CONTRIB_TOKEN"]
     while True:
         r = requests.get(
             f"{site}/wp-json/wp/v2/posts",
             params={"per_page": 100, "page": page, "_fields": "date,link,title,excerpt"},
-            headers={"User-Agent": "Mozilla/5.0 (compatible; contributions-bot)"},
+            headers=h,
             timeout=30,
         )
         print(site, page, r.status_code, r.text[:150])
@@ -60,4 +63,3 @@ for site in BLOGS:
     update(f"contributions/{name}.md", f"Artigos - {name}", list(wp_posts(site)))
 
 update("contributions/youtube.md", "Vídeos - YouTube", list(yt_videos()))
-
