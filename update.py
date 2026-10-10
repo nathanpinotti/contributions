@@ -37,15 +37,20 @@ def yt_videos():
 def update(path, title, rows):
     p = pathlib.Path(path)
     p.parent.mkdir(exist_ok=True)
-    header = [f"# {title}", "", "| Data | Título | URL | Descrição |", "|---|---|---|---|"]
-    lines = p.read_text(encoding="utf-8").splitlines() if p.exists() else header
-    body = lines[4:]
-    known = "\n".join(body)
-    new = sorted({r for r in rows if r[2] not in known}, reverse=True)
-    if not new:
-        return
-    new_lines = [f"| {d} | {t} | {u} | {desc} |" for d, t, u, desc in new]
-    p.write_text("\n".join(lines[:4] + new_lines + body) + "\n", encoding="utf-8")
+    all_rows = {}
+    if p.exists():
+        for l in p.read_text(encoding="utf-8").splitlines():
+            if l.startswith("| 20"):
+                r = tuple(l[2:-2].split(" | "))
+                all_rows[r[2]] = r
+    for r in rows:
+        all_rows.setdefault(r[2], r)
+    out = [f"# {title}", ""]
+    for year in sorted({r[0][:4] for r in all_rows.values()}, reverse=True):
+        out += [f"## {year}", "", "| Data | Título | URL | Descrição |", "|---|---|---|---|"]
+        out += [f"| {d} | {t} | {u} | {x} |" for d, t, u, x in sorted((r for r in all_rows.values() if r[0][:4] == year), reverse=True)]
+        out.append("")
+    p.write_text("\n".join(out), encoding="utf-8")
 
 
 for site in BLOGS:
