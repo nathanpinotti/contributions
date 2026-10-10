@@ -19,6 +19,7 @@ def wp_posts(site):
         r = requests.get(
             f"{site}/wp-json/wp/v2/posts",
             params={"per_page": 100, "page": page, "_fields": "date,link,title,excerpt"},
+            headers={"User-Agent": "Mozilla/5.0 (compatible; contributions-bot)"},
             timeout=30,
         )
         print(site, page, r.status_code, r.text[:150])
